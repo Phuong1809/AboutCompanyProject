@@ -17,12 +17,27 @@ import (
 	"gorm.io/gorm"
 )
 
+// GetStaffs godoc
+// @Summary return list of all
+// @Description Get all staff
+// @Produce  application/json
+// @Tags Staff
+// @Success 200 {object} models.Staff
+// @Router /staff/all [get]
 func GetStaffs(c *gin.Context,db *gorm.DB){
 	var staff []models.Staff
 	db.Preload("QR").Preload("Company").Find(&staff)
 	c.JSON(http.StatusOK,gin.H{"staffs":staff})
 }
 
+// GetStaffById godoc
+// @Summary return list of all
+// @Description Get all staff by id
+// @Produce  application/json
+// @Tags Staff
+// @Param id path int true "id"
+// @Success 200 {object} models.Staff
+// @Router /staff/{id} [get]
 func GetStaffById(c*gin.Context, db *gorm.DB){
 	IdStr := c.Param("id")
 	id,err:=strconv.ParseUint(IdStr,10,32)
@@ -34,6 +49,16 @@ func GetStaffById(c*gin.Context, db *gorm.DB){
 	c.JSON(http.StatusOK, gin.H{"staff":staff})
 }
 
+// AddStaff godoc
+// @Summary Add staff
+// @Description Add staff
+// @Accept  json
+// @Produce  json
+// @Tags Staff
+// @Param staff formData file true "staff"
+// @Param image formData file true "image"
+// @Success 200 {string} string	"add staff ok"
+// @Router /staff/add [post]
 func AddStaff(c *gin.Context, db *gorm.DB){
 	file, header, er := c.Request.FormFile("staff")
 	if er!=nil{
@@ -85,4 +110,24 @@ func AddStaff(c *gin.Context, db *gorm.DB){
 	staff.FilePathAvatar="D:\\Workspace_GO\\test_1\\avatar\\"+file_name_image
 	db.Save(staff)
 	c.JSON(http.StatusOK,"add staff ok")
+}
+
+// DeleteStaff godoc
+// @Summary Delete staff
+// @Description Delete staff
+// @Accept  json
+// @Produce  json
+// @Tags Staff
+// @Param id path int true "id"
+// @Success 200 {string} string	"DELETE OK"
+// @Router /staff/delete/{id} [delete]
+func DeleteStaff(c *gin.Context, db*gorm.DB){
+	id, er := strconv.ParseUint(c.Param("id"),10,32)
+	if er!=nil{
+		fmt.Println("cant convert to uint")
+		return
+	}
+	fmt.Println("id: ",id)
+	db.Where("id=?",id).Delete(&models.Staff{})
+	c.JSON(200, "DELETE OK")
 }

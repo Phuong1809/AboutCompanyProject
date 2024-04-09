@@ -1,11 +1,8 @@
 package models
 
-import (
-	"gorm.io/gorm"
-)
 
 type Staff struct {
-	gorm.Model
+	ID		   uint `gorm:"primaryKey" json:"id"`
 	StaffName   string `json:"staff_name"`
 	FilePathAvatar string `json:"file_path_avatar"`
 	Role         string `json:"role"`

@@ -1,9 +1,8 @@
 package models
 
-import "gorm.io/gorm"
 
 type Address struct {
-	gorm.Model
+	ID uint `gorm:"primaryKey" json:"id"`
 	AddressCompany string `json:"address_company"`
 	AddressSpecific string	`json:"address_specific"`
 	CompanyID uint `json:"company_id"`

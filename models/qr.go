@@ -13,7 +13,7 @@ import (
 )
 
 type QR struct {
-	gorm.Model
+	ID uint `gorm:"primaryKey" json:"id"`
 	FilePatch string
 	StaffId uint
 	Staff Staff `gorm:"foreignKey:StaffId"`
